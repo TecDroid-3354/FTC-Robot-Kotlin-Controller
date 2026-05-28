@@ -18,7 +18,7 @@ public class PedroTeleOpSample extends CommandOpMode {
         follower = Constants.createFollower(hardwareMap);
         super.reset();
 
-        follower.startTeleopDrive();
+        follower.startTeleopDrive(true);
     }
 
     @Override

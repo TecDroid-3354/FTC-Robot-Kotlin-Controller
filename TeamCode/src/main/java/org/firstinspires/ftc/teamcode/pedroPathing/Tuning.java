@@ -371,7 +371,6 @@ class ForwardVelocityTuner extends OpMode {
         follower.update();
         drawCurrentAndHistory();
 
-
         if (!end) {
             if (Math.abs(follower.getPose().getX()) > DISTANCE) {
                 end = true;
