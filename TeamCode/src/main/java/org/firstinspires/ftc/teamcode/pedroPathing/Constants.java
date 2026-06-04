@@ -11,7 +11,7 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS.Pose2D;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.utils.Mass;
-import org.firstinspires.ftc.teamcode.utils.PedroPathing;
+import org.firstinspires.ftc.teamcode.utils.autonomous.PedroPathing;
 
 import java.util.Optional;
 
@@ -36,11 +36,10 @@ public class Constants {
     public static MecanumConstants driveConstants       = PedroPathing.INSTANCE.createMecanumConstants(
             Optional.empty(),
             Optional.empty(),
-            Optional.of(1.0),
+            Optional.empty(),
             Optional.empty(),
             Optional.empty()
     );
-
     public static OTOSConstants otosLocalizerConstants  = PedroPathing.INSTANCE.createOTOSLocalizerConstants(
             Optional.of(new Pose2D(0.75, 0.0, Math.PI / 2.0)),
             Optional.of(1.126999),
