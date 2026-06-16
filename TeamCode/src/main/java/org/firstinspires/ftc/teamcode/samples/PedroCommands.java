@@ -10,6 +10,8 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 import com.seattlesolvers.solverslib.pedroCommand.HoldPointCommand;
+import com.seattlesolvers.solverslib.pedroCommand.TurnCommand;
+import com.seattlesolvers.solverslib.pedroCommand.TurnToCommand;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -43,12 +45,12 @@ public class PedroCommands extends CommandOpMode {
                 new HoldPointCommand(follower, pose, true),
 
 //                // TurnCommand
-//                new TurnCommand(follower, Math.PI / 2, false),
-//                new TurnCommand(follower, 90.0, true, AngleUnit.DEGREES),
+                new TurnCommand(follower, Math.PI / 2, false),
+                new TurnCommand(follower, 90.0, true, AngleUnit.DEGREES),
 //
 //                // TurnToCommand
-//                new TurnToCommand(follower, Math.PI / 2),
-//                new TurnToCommand(follower, 90.0, AngleUnit.DEGREES),
+                new TurnToCommand(follower, Math.PI / 2),
+                new TurnToCommand(follower, 90.0, AngleUnit.DEGREES),
 
                 // FollowPathCommand
                 new FollowPathCommand(follower, pathChain),

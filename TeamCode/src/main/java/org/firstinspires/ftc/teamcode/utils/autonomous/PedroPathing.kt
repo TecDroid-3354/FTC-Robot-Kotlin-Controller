@@ -52,7 +52,7 @@ object PedroPathing {
         // Initializing defaults
 
         with(followerDefaultConstants) {
-            mass                        (Mass.Companion.fromKilograms(10.0).kilograms)
+            mass                        (Mass.fromKilograms(10.0).kilograms)
             isUseSecondaryHeadingPIDF                       = false
             isUseSecondaryDrivePIDF                         = false
             isUseSecondaryTranslationalPIDF                 = false
@@ -96,8 +96,8 @@ object PedroPathing {
      * You can adjust the PIDF value LIVE when accessing Panels.
      * @param secondaryHeadingPIDFCoefficients the robot's secondary heading PIDF Coefficients.
      * You can adjust the PIDF value live when accessing to Panel.
-     * @param forwardZeroPowerAcceleration The deceleration rate of the robot over the x axis (forward) in inches per second squared. THIS VALUE IS REQUIRED TO BE NEGATIVE.
-     * @param lateralZeroPowerAcceleration The deceleration rate of the robot over the y axis (lateral) in inches per second squared. THIS VALUE IS REQUIRED TO BE NEGATIVE.
+     * @param forwardZeroPowerAcceleration The deceleration rate of the robot over the x-axis (forward) in inches per second squared. THIS VALUE IS REQUIRED TO BE NEGATIVE.
+     * @param lateralZeroPowerAcceleration The deceleration rate of the robot over the y-axis (lateral) in inches per second squared. THIS VALUE IS REQUIRED TO BE NEGATIVE.
      * @param translationalPIDFCoefficients the robot's primary translational PIDF Coefficients.
      * You can adjust the PIDF value LIVE when accessing Panels
      * @param secondaryTranslationalPIDFCoefficients the robot´'s secondary translational PIDF Coefficients.
@@ -109,7 +109,7 @@ object PedroPathing {
      * @param centripetalScaling the centripetal force correction enables the robot to accurately follow curved paths.
      * For this value to be tuned, your robot's [Mass] is needed by the [FollowerConstants].
      * You can use Panels to visualize the robot in Panels Field View
-     * @param movementPIDFSwitchValues this values represent the limit when the secondary PIDF controller in each type of movement
+     * @param movementPIDFSwitchValues these values represent the limit when the secondary PIDF controller in each type of movement
      * (turning, translational and drive) starts operating. It may be used when the secondary PIDFs are enabled.
      * @return a new [FollowerConstants] containing the specified parameters.
      * @see followerDefaultConstants
@@ -227,8 +227,8 @@ object PedroPathing {
      * @param rightSideDirection the desired motor's [DcMotorSimple.Direction] on the right side of the mecanum.
      * @param leftSideDirection the desired motor's [DcMotorSimple.Direction] on the left side of the mecanum.
      * @param maxPower the maximum applied power to the mecanum motors
-     * @param xVelocity the average maximum velocity over the x axis of the robot (Forward and reverse).
-     * @param yVelocity the average maximum velocity over the y axis of the robot (Left and right).
+     * @param xVelocity the average maximum velocity over the x-axis of the robot (Forward and reverse).
+     * @param yVelocity the average maximum velocity over the y-axis of the robot (Left and right).
      * @return a new [MecanumConstants] containing the specified parameters. If not it will simply return the default values.
      * @see [mecanumDefaultConstants]
      */

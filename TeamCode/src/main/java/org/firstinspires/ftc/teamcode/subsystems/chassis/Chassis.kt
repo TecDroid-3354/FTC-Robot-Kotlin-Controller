@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems
+package org.firstinspires.ftc.teamcode.subsystems.chassis
 
 import com.pedropathing.follower.Follower
 import com.pedropathing.ftc.FTCCoordinates
@@ -7,8 +7,8 @@ import com.pedropathing.geometry.PedroCoordinates
 import com.pedropathing.math.Vector
 import com.pedropathing.paths.PathChain
 import com.seattlesolvers.solverslib.command.Command
+import com.seattlesolvers.solverslib.command.InstantCommand
 import com.seattlesolvers.solverslib.command.RunCommand
-
 import com.seattlesolvers.solverslib.command.SubsystemBase
 import com.seattlesolvers.solverslib.gamepad.GamepadEx
 import com.seattlesolvers.solverslib.geometry.Rotation2d
@@ -16,8 +16,7 @@ import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D
 import org.firstinspires.ftc.teamcode.utils.Alliance
-
-import org.firstinspires.ftc.teamcode.utils.constants.RobotConstants.Telemetry.pTelemetry
+import org.firstinspires.ftc.teamcode.utils.constants.RobotConstants
 
 class Chassis(
     private val follower: Follower,
@@ -30,7 +29,6 @@ class Chassis(
      */
     override fun periodic() {
         follower.update()
-        pTelemetry.update()
 
         /* Add telemetry if needed, it will be displayed in Panels and the Driver Hub. */
         //pTelemetry.addData("Timestamp", time)
@@ -39,24 +37,25 @@ class Chassis(
     /**
      * Retrieves the [controller]'s axis readings and converts them into robot's velocity.
      * The axis get multiplied by each [ChassisConstants.Control] Multiplier and its respective alliance multiplier.
-     * @return a [RunCommand] which set the [Follower]'s TeleOp drive to the [controller]'s axis.
+     * @return a [com.seattlesolvers.solverslib.command.RunCommand] which set the [Follower]'s TeleOp drive to the [controller]'s axis.
      */
     fun driveFollowingDriverInput(): Command {
         return RunCommand({
             follower.setTeleOpDrive(
-                controller.leftY    * ChassisConstants.Control.FORWARD_VELOCITY_MULTIPLIER * alliance.multiplier,
-                controller.leftX    * ChassisConstants.Control.LATERAL_VELOCITY_MULTIPLIER * alliance.multiplier,
-                controller.rightX   * ChassisConstants.Control.TURN_VELOCITY_MULTIPLIER,
+                controller.leftY * ChassisConstants.Control.FORWARD_VELOCITY_MULTIPLIER * alliance.multiplier,
+                controller.leftX * ChassisConstants.Control.LATERAL_VELOCITY_MULTIPLIER * alliance.multiplier,
+                controller.rightX * ChassisConstants.Control.TURN_VELOCITY_MULTIPLIER,
                 false
             )
         }, this)
-            .beforeStarting     (Runnable{ follower.startTeleopDrive(true) })
-            .whenFinished       (Runnable{ follower.breakFollowing() })
+
+            .beforeStarting(InstantCommand({ follower.startTeleopDrive(ChassisConstants.Control.IS_BRAKE_MODE) }))
+            .whenFinished  { follower.breakFollowing() }
     }
 
     /**
      * Gets the Follower's current position.
-     * @return a [Pose2D] containing the robot's current position.
+     * @return a [org.firstinspires.ftc.robotcore.external.navigation.Pose2D] containing the robot's current position.
      */
     fun getPose(): Pose2D {
         return PoseConverter.poseToPose2D(follower.pose, FTCCoordinates.INSTANCE)
@@ -64,26 +63,26 @@ class Chassis(
 
     /**
      * Gets the [Follower]'s rotation component.
-     * @return a [Rotation2d] as the robot's current heading in radians.
+     * @return a [com.seattlesolvers.solverslib.geometry.Rotation2d] as the robot's current heading in radians.
      */
     fun getRotation(): Rotation2d {
         return Rotation2d(getPose().getHeading(AngleUnit.RADIANS))
     }
 
     /**
-     * Gets the current [Follower]'s velocity as a [Vector]
+     * Gets the current [Follower]'s velocity as a [com.pedropathing.math.Vector]
      * @return the current robot's velocity
      */
-    fun getVelocity(): Vector  {
+    fun getVelocity(): Vector {
         return follower.velocity
     }
 
     /**
-     * Constructs a new [FollowPathCommand] based on the given parameters
+     * Constructs a new [com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand] based on the given parameters
      * @param path the desired path to follow
      * @param holdEnd if the path is required to hold its end at the end of the path
      * @param maxPower the maximum achievable power by the robot along the path
-     * @return a new [FollowPathCommand] with the given parameters
+     * @return a new [com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand] with the given parameters
      */
     fun followPathCMD(path: PathChain, holdEnd: Boolean, maxPower: Double): Command {
         return FollowPathCommand(follower, path, holdEnd, maxPower)
