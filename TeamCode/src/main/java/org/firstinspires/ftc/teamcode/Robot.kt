@@ -27,9 +27,17 @@ class Robot(private val alliance: Alliance, private val hardwareMap: HardwareMap
 
     /* Initialize your teleop controller commands here */
     fun initTeleOp() {
-        controller.a()
-            .onTrue(InstantCommand({ sampleMotor.enableMotor() }))
-            .onFalse(InstantCommand({ sampleMotor.disableMotor() }))
+        /* a button, turn on velocity mode */
+        controller
+
+        /* b button, turn on position mode */
+        controller
+
+        /* y button, turn on raw power mode */
+        controller
+
+        /* turn on motor depending on mode */
+        controller
     }
 
     /* Initialize your auto commands here, set chassis alliance and starting pose */

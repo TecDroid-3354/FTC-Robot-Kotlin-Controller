@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.utils
+package org.firstinspires.ftc.teamcode.utils.extensions
 
 import com.seattlesolvers.solverslib.command.Command
 import com.seattlesolvers.solverslib.command.button.GamepadButton
