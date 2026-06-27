@@ -19,7 +19,7 @@ public class Constants {
 
     // Follower Constants, must be passed as a property to the createFollower() method
     public static FollowerConstants followerConstants   = PedroPathing.INSTANCE.createFollowerConstants(
-            Optional.of(Mass.fromKilograms(15.0)),
+            Optional.empty(),
             Optional.empty(),
             Optional.empty(),
             Optional.empty(),
@@ -41,9 +41,9 @@ public class Constants {
             Optional.empty()
     );
     public static OTOSConstants otosLocalizerConstants  = PedroPathing.INSTANCE.createOTOSLocalizerConstants(
-            Optional.of(new Pose2D(0.75, 0.0, Math.PI / 2.0)),
-            Optional.of(1.126999),
-            Optional.of(0.9951)
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty()
     );
 
     public static PathConstraints pathConstraints       = PedroPathing.INSTANCE.createPathConstraints(

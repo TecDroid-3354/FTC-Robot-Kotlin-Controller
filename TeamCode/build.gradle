@@ -32,6 +32,12 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xjvm-expose-boxed")
+    }
+}
+
 repositories {
     maven {
         url = 'https://maven.brott.dev/'
@@ -63,7 +69,7 @@ dependencies {
     implementation "com.acmerobotics.dashboard:dashboard:0.5.1" // FTC Dashboard
 
     // Pedro Pathing
-    implementation 'com.pedropathing:ftc:2.0.6'
+    implementation 'com.pedropathing:ftc:2.1.2'
     implementation 'com.pedropathing:telemetry:1.0.0'
 
     // Panels Dashboard
