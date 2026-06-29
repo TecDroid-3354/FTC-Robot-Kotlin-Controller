@@ -6,15 +6,18 @@ import com.seattlesolvers.solverslib.command.CommandScheduler
 import com.seattlesolvers.solverslib.command.Robot
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.utils.constants.RobotConstants.Telemetry.pTelemetry
+import org.firstinspires.ftc.teamcode.utils.devices.OpMotorEx
 
 abstract class TecDroidRobot(private val telemetry: Telemetry, private val hardwareMap: HardwareMap): Robot() {
 
     init {
+        OpMotorEx.clearRegistry()
         initBulkReadings()
-        subsystemInitialization()
     }
 
     protected abstract fun subsystemInitialization()
+
+    protected abstract fun updateTelemetry()
 
     abstract fun initTeleOp()
 
@@ -24,10 +27,9 @@ abstract class TecDroidRobot(private val telemetry: Telemetry, private val hardw
         super.setBulkReading(hardwareMap, LynxModule.BulkCachingMode.MANUAL)
     }
 
-    protected abstract fun updateTelemetry()
-
     override fun run() {
         CommandScheduler.getInstance().run()
+        OpMotorEx.updateAll()
         updateTelemetry()
         pTelemetry.update(telemetry)
     }

@@ -227,8 +227,8 @@ object PedroPathing {
      * @param rightSideDirection the desired motor's [DcMotorSimple.Direction] on the right side of the mecanum.
      * @param leftSideDirection the desired motor's [DcMotorSimple.Direction] on the left side of the mecanum.
      * @param maxPower the maximum applied power to the mecanum motors
-     * @param xVelocity the average maximum velocity over the x-axis of the robot (Forward and reverse).
-     * @param yVelocity the average maximum velocity over the y-axis of the robot (Left and right).
+     * @param xVelocity the average maximum velocity over the x-axis of the robot (Forward and reverse) in inches per second.
+     * @param yVelocity the average maximum velocity over the y-axis of the robot (Left and right) in inches per second.
      * @return a new [MecanumConstants] containing the specified parameters. If not it will simply return the default values.
      * @see [mecanumDefaultConstants]
      */

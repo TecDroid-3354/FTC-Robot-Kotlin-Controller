@@ -14,6 +14,10 @@ class Robot(private val alliance: Alliance, private val hardwareMap: HardwareMap
     /* Declare your subsystems here */
     private lateinit var sampleMotor: SimpleMotorSubsystem
 
+    init {
+        subsystemInitialization()
+    }
+
     /* Initialize your subsystems here */
     override fun subsystemInitialization() {
         sampleMotor = SimpleMotorSubsystem(hardwareMap)
