@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode
 import com.seattlesolvers.solverslib.command.CommandOpMode
 import com.seattlesolvers.solverslib.gamepad.GamepadEx
 import org.firstinspires.ftc.teamcode.utils.Alliance
-import org.firstinspires.ftc.teamcode.utils.TecDroidRobot
 
 open class TeleOpMode(val alliance: Alliance): CommandOpMode() {
     lateinit var controller: GamepadEx
@@ -12,7 +11,7 @@ open class TeleOpMode(val alliance: Alliance): CommandOpMode() {
     override fun initialize() {
         super.reset()
         controller = GamepadEx(gamepad1)
-        robot = Robot(alliance, hardwareMap, controller, telemetry)
+        robot = Robot(alliance, hardwareMap, controller)
         robot.initTeleOp()
     }
 
