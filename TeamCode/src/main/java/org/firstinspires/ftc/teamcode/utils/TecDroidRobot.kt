@@ -17,7 +17,7 @@ abstract class TecDroidRobot(private val telemetry: Telemetry, private val hardw
 
     protected abstract fun subsystemInitialization()
 
-    protected abstract fun updateTelemetry()
+    protected abstract fun printTelemetry()
 
     abstract fun initTeleOp()
 
@@ -30,7 +30,7 @@ abstract class TecDroidRobot(private val telemetry: Telemetry, private val hardw
     override fun run() {
         CommandScheduler.getInstance().run()
         OpMotorEx.updateAll()
-        updateTelemetry()
+        printTelemetry()
         pTelemetry.update(telemetry)
     }
 

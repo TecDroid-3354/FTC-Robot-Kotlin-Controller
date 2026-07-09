@@ -105,7 +105,7 @@ class TrapezoidalMotionProfile(val motor: OpMotorEx, val config: TrapezoidalMode
             }
         }
 
-        val currentPose = motor.getPosition().rotations
+        val currentPose = motor.getPosition().get().rotations
         val power = controller.calculate(currentPose, setpoint)
         motor.getMotorInstance().set(power)
     }
@@ -116,6 +116,6 @@ class TrapezoidalMotionProfile(val motor: OpMotorEx, val config: TrapezoidalMode
         acceleration = config.acceleration
         controller = PIDController(config.profileCoefficients.p, config.profileCoefficients.i, config.profileCoefficients.d)
         timer.reset()
-        startPose = motor.getPosition()
+        startPose = motor.getPosition().get()
     }
 }

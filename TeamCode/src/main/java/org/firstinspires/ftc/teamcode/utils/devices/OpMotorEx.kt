@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.utils.extensions.setVelocityCoefficients
 import org.firstinspires.ftc.teamcode.utils.extensions.setVelocityFeedforward
 import org.firstinspires.ftc.teamcode.utils.configurations.genericConfigurations.GenericMotorConfiguration
 import org.firstinspires.ftc.teamcode.utils.TecDroidRobot
+import java.util.function.Supplier
 import kotlin.math.max
 import kotlin.math.min
 
@@ -54,17 +55,17 @@ class OpMotorEx(hardwareMap: HardwareMap, motorId: String) {
      * Constructs a new [Angle] value and returns it
      * @return the current motor's angle
      */
-    fun getPosition(): Angle { return Angle(motor.currentPosition / countPerRev / reduction) }
+    fun getPosition(): Supplier<Angle> { return { Angle(motor.currentPosition / countPerRev / reduction) } }
     /**
      * Constructs a new [AngularVelocity] value and returns it
      * @return the current motor's velocity
      */
-    fun getVelocity(): AngularVelocity { return AngularVelocity(motor.velocity / countPerRev / reduction) }
+    fun getVelocity(): Supplier<AngularVelocity> { return { AngularVelocity(motor.velocity / countPerRev / reduction) } }
     /**
      * Constructs a new [AngularAcceleration] value and returns it
      * @return the current motor's acceleration
      */
-    fun getAcceleration(): AngularAcceleration {return AngularAcceleration( motor.acceleration / countPerRev / reduction) }
+    fun getAcceleration(): Supplier<AngularAcceleration> {return { AngularAcceleration(motor.acceleration / countPerRev / reduction) } }
     /**
      * @return the motor's set power
      */
@@ -137,7 +138,7 @@ class OpMotorEx(hardwareMap: HardwareMap, motorId: String) {
     /**
      * Stops the motor
      */
-    fun stopMotor() { motor.stopMotor() }
+    fun stopMotor() { motor.set(0.0) }
 
     /**
      * @return this [OpMotorEx] correspondent [MotorEx] instance
@@ -222,7 +223,7 @@ class OpMotorEx(hardwareMap: HardwareMap, motorId: String) {
 
         when (controlMode) {
             ControlMode.POSITION -> {
-                val power = positionController.calculate(getPosition().rotations, targetAngle.rotations)
+                val power = positionController.calculate(getPosition().get().rotations, targetAngle.rotations)
                 motor.set(power)
             }
             ControlMode.TRAPEZOIDAL -> {
