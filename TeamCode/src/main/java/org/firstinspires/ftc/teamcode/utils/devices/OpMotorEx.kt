@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.utils.extensions.setVelocityCoefficients
 import org.firstinspires.ftc.teamcode.utils.extensions.setVelocityFeedforward
 import org.firstinspires.ftc.teamcode.utils.configurations.genericConfigurations.GenericMotorConfiguration
 import org.firstinspires.ftc.teamcode.utils.TecDroidRobot
+import java.util.function.BooleanSupplier
 import java.util.function.Supplier
 import kotlin.math.max
 import kotlin.math.min
@@ -47,6 +48,7 @@ class OpMotorEx(hardwareMap: HardwareMap, motorId: String) {
     // Initialization code. Runs at class init //
     init {
         motor = MotorEx(hardwareMap, motorId)
+        motor.set(0.0)
         registry.add(this)
     }
 
@@ -61,11 +63,6 @@ class OpMotorEx(hardwareMap: HardwareMap, motorId: String) {
      * @return the current motor's velocity
      */
     fun getVelocity(): Supplier<AngularVelocity> { return { AngularVelocity(motor.velocity / countPerRev / reduction) } }
-    /**
-     * Constructs a new [AngularAcceleration] value and returns it
-     * @return the current motor's acceleration
-     */
-    fun getAcceleration(): Supplier<AngularAcceleration> {return { AngularAcceleration(motor.acceleration / countPerRev / reduction) } }
     /**
      * @return the motor's set power
      */
@@ -114,8 +111,7 @@ class OpMotorEx(hardwareMap: HardwareMap, motorId: String) {
         if (controlMode != ControlMode.POSITION) { throw wrongControlModeCommandException }
 
         val clampedAngle = angle.rotations.coerceIn(positionLimits.start.rotations, positionLimits.endInclusive.rotations)
-        val transformedAngle = clampedAngle * reduction
-        targetAngle = Angle(transformedAngle)
+        targetAngle = Angle(clampedAngle)
     }
 
     /**
@@ -126,24 +122,64 @@ class OpMotorEx(hardwareMap: HardwareMap, motorId: String) {
      * If not, an [IllegalAccessException] will be thrown.
      * @param angle the desired profiled angle
      */
-    fun setAngleWithProfile(angle: Angle) {
+    fun setProfiledAngle(angle: Angle) {
         if (controlMode != ControlMode.TRAPEZOIDAL) { throw wrongControlModeCommandException }
 
         val clampedAngle = angle.rotations.coerceIn(positionLimits.start.rotations, positionLimits.endInclusive.rotations)
-        val transformedAngle = clampedAngle * reduction
-        targetAngle = Angle(transformedAngle)
+        targetAngle = Angle(clampedAngle)
         trapezoidalController.setTargetAngle(targetAngle)
     }
 
     /**
-     * Stops the motor
+     * Stops the motor by calling its set method and assigning a new value of 0.0. When stopping a motor do not
+     * call the built-in [com.seattlesolvers.solverslib.hardware.motors.Motor.stopMotor] as it interferes with the velocity
+     * mode's commands.
      */
     fun stopMotor() { motor.set(0.0) }
+
+    /**
+     * Checks whether the [positionController] or the [trapezoidalController]'s position is near its target or at it
+     * based on the tolerance declared in its respective [ControlModeConfiguration]. If the configured mode does not correpond
+     * to either positon or trapezoidal an error will be thrown.
+     * @return whether the controller has reached its target position
+     */
+    fun isAtPositionTarget(): BooleanSupplier {
+        return {
+            when (controlMode) {
+                ControlMode.POSITION -> positionController.atSetPoint()
+                ControlMode.TRAPEZOIDAL -> trapezoidalController.atSetPoint()
+                else -> throw wrongControlModeCommandException
+            }
+        }
+    }
 
     /**
      * @return this [OpMotorEx] correspondent [MotorEx] instance
      */
     fun getMotorInstance(): MotorEx { return motor }
+
+    /**
+     * Per-instance update logic. Called automatically for every existing [OpMotorEx] inside [TecDroidRobot]
+     * when [updateAll] is invoked from its main loop. There is no need to call this method directly from a subsystem.
+     * Updates the [trapezoidalController] or [positionController] if this [OpMotorEx] instance was initialized either
+     * wtih [ControlMode.TRAPEZOIDAL] or [ControlMode.POSITION]
+     * Checks if [controlMode] has already been initialized when configuring the motor
+     * throguh [applyConfigurationAndResetEncoder]. If not, method's skipped
+     */
+    private fun updateMotor() {
+        if (!::controlMode.isInitialized) return
+
+        when (controlMode) {
+            ControlMode.POSITION -> {
+                val power = positionController.calculate(getPosition().get().rotations, targetAngle.rotations)
+                motor.set(power)
+            }
+            ControlMode.TRAPEZOIDAL -> {
+                trapezoidalController.updateProfile()
+            }
+            else -> { /* Nothing's done here as the rest of control modes do not require an update in their respective controllers */ }
+        }
+    }
 
     /**
      * Applies a new [ControlModeConfiguration] to this [OpMotorEx].
@@ -164,10 +200,12 @@ class OpMotorEx(hardwareMap: HardwareMap, motorId: String) {
             }
             is PositionModeConfiguration -> {
                 positionController = PIDFController(config.positionCoefficients)
+                positionController.setTolerance(config.positionTolerance)
                 positionLimits = config.positionLimits
             }
             is TrapezoidalModeConfiguration -> {
                 trapezoidalController = TrapezoidalMotionProfile(this, config)
+                trapezoidalController.setPositionTolerance(config.positionTolerance)
                 positionLimits = config.profileLimits
             }
         }
@@ -200,37 +238,16 @@ class OpMotorEx(hardwareMap: HardwareMap, motorId: String) {
             }
             is PositionModeConfiguration -> {
                 positionController = PIDFController(modeConfig.positionCoefficients)
+                positionController.setTolerance(modeConfig.positionTolerance)
                 positionLimits = modeConfig.positionLimits
             }
             is TrapezoidalModeConfiguration -> {
                 trapezoidalController = TrapezoidalMotionProfile(this, modeConfig)
+                trapezoidalController.setPositionTolerance(modeConfig.positionTolerance)
                 positionLimits = modeConfig.profileLimits
             }
         }
         motor.stopAndResetEncoder()
-    }
-
-    /**
-     * Per-instance update logic. Called automatically for every existing [OpMotorEx] inside [TecDroidRobot]
-     * when [updateAll] is invoked from its main loop. There is no need to call this method directly from a subsystem.
-     * Updates the [trapezoidalController] or [positionController] if this [OpMotorEx] instance was initialized either
-     * wtih [ControlMode.TRAPEZOIDAL] or [ControlMode.POSITION]
-     * Checks if [controlMode] has already been initialized when configuring the motor
-     * throguh [applyConfigurationAndResetEncoder]. If not, method's skipped
-     */
-    private fun updateMotor() {
-        if (!::controlMode.isInitialized) return
-
-        when (controlMode) {
-            ControlMode.POSITION -> {
-                val power = positionController.calculate(getPosition().get().rotations, targetAngle.rotations)
-                motor.set(power)
-            }
-            ControlMode.TRAPEZOIDAL -> {
-                trapezoidalController.updateProfile()
-            }
-            else -> { /* Nothing's done here as the rest of control modes do not require an update in their respective controllers */ }
-        }
     }
 
     /**
