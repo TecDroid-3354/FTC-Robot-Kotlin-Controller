@@ -11,16 +11,23 @@ class PositionModeConfiguration: ControlModeConfiguration {
 
     var positionCoefficients        : PIDFCoefficients                  = PIDFCoefficients()
 
-    var positionLimits              : ClosedRange<Angle>                = Angle(Double.NEGATIVE_INFINITY)..
-            Angle(Double.POSITIVE_INFINITY)
+    var positionLimits              : ClosedRange<Angle>                =
+        Angle(Double.NEGATIVE_INFINITY)..Angle(Double.POSITIVE_INFINITY)
+
+    var positionTolerance           : Double                            = 0.5
 
     fun withPIDFCoefficients(value: PIDFCoefficients)                   : PositionModeConfiguration {
         this.positionCoefficients = value
         return this
     }
 
-    fun withPositionLimits(value: ClosedRange<Angle>)     : PositionModeConfiguration {
+    fun withPositionLimits(value: ClosedRange<Angle>)       : PositionModeConfiguration {
         this.positionLimits = value
+        return this
+    }
+
+    fun withPositionTolerance(value: Double)                : PositionModeConfiguration {
+        this.positionTolerance = value
         return this
     }
 }

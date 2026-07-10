@@ -29,5 +29,6 @@ fun MotorEx.applyGenericConfiguration(config: GenericMotorConfiguration, mode: C
         ControlMode.VELOCITY -> Motor.RunMode.VelocityControl
         else -> Motor.RunMode.RawPower
     })
+    this.setCachingTolerance(config.cachingTolerance)
     this.setZeroPowerBehavior(config.zeroPowerBehavior)
 }

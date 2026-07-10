@@ -15,6 +15,8 @@ class TrapezoidalModeConfiguration: ControlModeConfiguration {
 
     var acceleration                : AngularAcceleration   = AngularAcceleration(0.0)
 
+    var positionTolerance           : Double                = 0.5
+
     var profileLimits               : ClosedRange<Angle>    = Angle(Double.NEGATIVE_INFINITY)..
             Angle(Double.POSITIVE_INFINITY)
 
@@ -30,7 +32,12 @@ class TrapezoidalModeConfiguration: ControlModeConfiguration {
         return this
     }
 
-    fun withProfileLimits(value: ClosedRange<Angle>): TrapezoidalModeConfiguration {
+    fun withPositionTolerance(value: Double)                : TrapezoidalModeConfiguration {
+        this.positionTolerance = value
+        return this
+    }
+
+    fun withProfileLimits(value: ClosedRange<Angle>)        : TrapezoidalModeConfiguration {
         this.profileLimits = value
         return this
     }

@@ -42,6 +42,10 @@ class TrapezoidalMotionProfile(val motor: OpMotorEx, val config: TrapezoidalMode
         timer.reset()
     }
 
+    fun setPositionTolerance(tolerance: Double) {
+        controller.setTolerance(tolerance)
+    }
+
     /**
      * Sets new cruise velocity and max acceleration to this profile. It will affect how the profile reacts to a setpoint.
      * Ensure your values are not too high neither too low.
@@ -59,6 +63,10 @@ class TrapezoidalMotionProfile(val motor: OpMotorEx, val config: TrapezoidalMode
      */
     fun setTargetAngle(angle: Angle) {
         targetPose = angle
+    }
+
+    fun atSetPoint(): Boolean {
+        return controller.atSetPoint()
     }
 
     /**
@@ -115,7 +123,7 @@ class TrapezoidalMotionProfile(val motor: OpMotorEx, val config: TrapezoidalMode
         cruiseVelocity = config.cruiseVelocity
         acceleration = config.acceleration
         controller = PIDController(config.profileCoefficients.p, config.profileCoefficients.i, config.profileCoefficients.d)
-        timer.reset()
         startPose = motor.getPosition().get()
+        timer.reset()
     }
 }
