@@ -36,7 +36,6 @@ import java.util.List;
  */
 @Configurable
 @TeleOp(name = "Tuning", group = "Pedro Pathing")
-@Disabled
 public class Tuning extends SelectableOpMode {
     public static Follower follower;
 
@@ -1189,7 +1188,7 @@ class Drawing {
     private static final FieldManager panelsField = PanelsField.INSTANCE.getField();
 
     private static final Style robotLook = new Style(
-            "", "#3F51B5", 0.0
+            "", "#3F51B5", 2.0
     );
     private static final Style historyLook = new Style(
             "", "#4CAF50", 0.0

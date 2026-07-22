@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.seattlesolvers.solverslib.command.CommandOpMode
 import com.seattlesolvers.solverslib.gamepad.GamepadEx
 import org.firstinspires.ftc.teamcode.utils.Alliance
@@ -11,7 +12,7 @@ open class TeleOpMode(val alliance: Alliance): CommandOpMode() {
     override fun initialize() {
         super.reset()
         controller = GamepadEx(gamepad1)
-        robot = Robot(alliance, hardwareMap, controller)
+        robot = Robot(alliance, hardwareMap, controller, telemetry)
         robot.initTeleOp()
     }
 

@@ -31,6 +31,8 @@ class Hood(hardwareMap: HardwareMap) {
 
         /**Apply your configuration here**/
 
+        hoodServo.setInverted(HoodConstants.Configuration.isHoodServoInverted)
+
 
         /**
          * Interpolations LookUp Table
@@ -63,18 +65,20 @@ class Hood(hardwareMap: HardwareMap) {
         /**
          * Multiply your target position by the tics and gear ratio
          * */
-        targetPosition = targetPosition * HoodConstants.physicalLimits.gearRatio
+        targetPosition = targetPosition * HoodConstants.PhysicalLimits.gearRatio
 
         /**This function ensures your target position is within the min and max angle**/
-        targetPosition = MathUtils.clamp(/**Value that you are going to evaluate**/, /**min value**/,
-            /**Max value**/)
+        targetPosition = MathUtils.clamp(targetPosition, HoodConstants.PhysicalLimits.minAngle,
+            HoodConstants.PhysicalLimits.maxAngle)
+
+        hoodServo.set(targetPosition)
 
 
 
     }
 
     fun moveHoodDownPosition(){
-        //Make your code here
+        hoodServo.set(HoodConstants.PhysicalLimits.minAngle)
 
     }
 
