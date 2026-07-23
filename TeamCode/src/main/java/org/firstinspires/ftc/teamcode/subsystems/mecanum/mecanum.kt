@@ -19,19 +19,21 @@ class mecanum (hardwareMap: HardwareMap) {
     lateinit var mecanum: MecanumDrive
 
     init {
-        frontRight = Motor(hardwareMap, "frontRight")
+        frontRight = Motor(hardwareMap, "frontRightMotor")
+        backRight = Motor(hardwareMap,"backRightMotor")
+        backLeft = Motor(hardwareMap,"backLeftMotor")
+        frontLeft = Motor(hardwareMap,"frontLeftMotor")
 
-        backRight = Motor(hardwareMap,"backRight")
-
-        backLeft = Motor(hardwareMap,"backLeft")
-
-        frontLeft = Motor(hardwareMap,"frontLeft")
+        frontRight.setInverted(false)
+        backRight.setInverted(false)
+        backLeft.setInverted(false)
+        frontLeft.setInverted(false)
 
         mecanum = MecanumDrive(frontLeft, frontRight, backLeft, backRight)
     }
 
     fun drive(driveVelocity: Double, lateralVelocity: Double, rotationVelocity: Double){
-        mecanum.driveRobotCentric(driveVelocity,lateralVelocity,rotationVelocity)
+        mecanum.driveRobotCentric(lateralVelocity,driveVelocity,rotationVelocity)
     }
 
 }

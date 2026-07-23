@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.utils.extensions.x
 import org.firstinspires.ftc.teamcode.utils.extensions.y
 
 @TeleOp(name = "Test TeleOp", group = "TeleOp")
-class TestTeleOp (val hardwareMap: HardwareMap): CommandOpMode() {
+class TestTeleOp (): CommandOpMode() {
 
     lateinit var controller : GamepadEx
 
@@ -47,6 +47,7 @@ class TestTeleOp (val hardwareMap: HardwareMap): CommandOpMode() {
 
         indexer = Indexer(hardwareMap)
         intake = Intake(hardwareMap)
+        mecanum = mecanum(hardwareMap)
 
 
         /*controller.y()
@@ -89,9 +90,9 @@ class TestTeleOp (val hardwareMap: HardwareMap): CommandOpMode() {
         while (!isStopRequested && opModeIsActive()) {
             CommandScheduler.getInstance().run()
             mecanum.drive(
-                controller.leftY,
-                controller.leftX,
-                controller.rightX
+                -controller.leftY,
+                -controller.leftX,
+                -controller.rightX
             )
         }
 
