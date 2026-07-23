@@ -24,10 +24,10 @@ class mecanum (hardwareMap: HardwareMap) {
         backLeft = Motor(hardwareMap,"backLeftMotor")
         frontLeft = Motor(hardwareMap,"frontLeftMotor")
 
-        frontRight.setInverted(false)
+        frontRight.setInverted(true)
         backRight.setInverted(false)
         backLeft.setInverted(false)
-        frontLeft.setInverted(false)
+        frontLeft.setInverted(true)
 
         mecanum = MecanumDrive(frontLeft, frontRight, backLeft, backRight)
     }
