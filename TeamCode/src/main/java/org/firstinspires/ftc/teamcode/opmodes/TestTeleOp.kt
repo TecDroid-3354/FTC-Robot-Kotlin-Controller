@@ -12,6 +12,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys
 import com.seattlesolvers.solverslib.hardware.motors.Motor
 import org.firstinspires.ftc.teamcode.subsystems.Indexer.Indexer
 import org.firstinspires.ftc.teamcode.subsystems.Intake.Intake
+import org.firstinspires.ftc.teamcode.subsystems.mecanum.mecanum
 import org.firstinspires.ftc.teamcode.utils.extensions.a
 import org.firstinspires.ftc.teamcode.utils.extensions.b
 import org.firstinspires.ftc.teamcode.utils.extensions.leftBumper
@@ -33,6 +34,8 @@ class TestTeleOp (val hardwareMap: HardwareMap): CommandOpMode() {
 
     lateinit var indexer: Indexer
     lateinit var intake: Intake
+
+    lateinit var mecanum: mecanum
 
     override fun initialize() {
         /*frontRightMotor = Motor(hardwareMap, "frontRightMotor")
@@ -85,6 +88,11 @@ class TestTeleOp (val hardwareMap: HardwareMap): CommandOpMode() {
         waitForStart()
         while (!isStopRequested && opModeIsActive()) {
             CommandScheduler.getInstance().run()
+            mecanum.drive(
+                controller.leftY,
+                controller.leftX,
+                controller.rightX
+            )
         }
 
         reset()
