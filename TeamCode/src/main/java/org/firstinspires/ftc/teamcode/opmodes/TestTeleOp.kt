@@ -12,9 +12,12 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys
 import com.seattlesolvers.solverslib.hardware.motors.Motor
 import org.firstinspires.ftc.teamcode.subsystems.Indexer.Indexer
 import org.firstinspires.ftc.teamcode.subsystems.Intake.Intake
+import org.firstinspires.ftc.teamcode.subsystems.hood.Hood
 import org.firstinspires.ftc.teamcode.subsystems.mecanum.mecanum
 import org.firstinspires.ftc.teamcode.utils.extensions.a
 import org.firstinspires.ftc.teamcode.utils.extensions.b
+import org.firstinspires.ftc.teamcode.utils.extensions.dpadDown
+import org.firstinspires.ftc.teamcode.utils.extensions.dpadUp
 import org.firstinspires.ftc.teamcode.utils.extensions.leftBumper
 import org.firstinspires.ftc.teamcode.utils.extensions.onFalse
 import org.firstinspires.ftc.teamcode.utils.extensions.onTrue
@@ -37,6 +40,10 @@ class TestTeleOp (): CommandOpMode() {
 
     lateinit var mecanum: mecanum
 
+    lateinit var hood: Hood
+
+    var position : Double = 0.0
+
     override fun initialize() {
         /*frontRightMotor = Motor(hardwareMap, "frontRightMotor")
         frontLeftMotor = Motor(hardwareMap,"frontLeftMotor")
@@ -48,6 +55,7 @@ class TestTeleOp (): CommandOpMode() {
         indexer = Indexer(hardwareMap)
         intake = Intake(hardwareMap)
         mecanum = mecanum(hardwareMap)
+        hood = Hood(hardwareMap)
 
 
         /*controller.y()
@@ -82,6 +90,10 @@ class TestTeleOp (): CommandOpMode() {
         controller.rightBumper()
             .onTrue(InstantCommand({intake.reverseIntake()}))
             .onFalse(InstantCommand({intake.disableIntake()}))
+        controller.dpadUp()
+            .onTrue(InstantCommand({position += 0.1}))
+        controller.dpadDown()
+            .onTrue(InstantCommand({position -= 0.1}))
     }
 
     override fun runOpMode() {
@@ -94,6 +106,19 @@ class TestTeleOp (): CommandOpMode() {
                 -controller.leftX,
                 -controller.rightX
             )
+
+            hood.setServo(position)
+
+            if (position < 0.0 ) {
+                position = 0.0
+            }
+
+            if (position > 1.0 ){
+                position = 1.0
+            }
+
+            telemetry.addData("position", position)
+            telemetry.update()
         }
 
         reset()

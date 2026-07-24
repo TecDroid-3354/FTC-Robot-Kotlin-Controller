@@ -17,17 +17,15 @@ class Hood(hardwareMap: HardwareMap) {
      * Declare your variables here
      * */
 
-    private val hoodServo: ServoEx
+    /**
+     * Initialize your servo here
+     * */
+    private var hoodServo: ServoEx = ServoEx(hardwareMap, HoodConstants.Identification.hoodServoId)
     val interpolation = InterpLUT()
     var distance = 10.0
 
 
     init {
-        /**
-         * Initialize your servo here
-         * */
-
-        hoodServo = ServoEx(hardwareMap, HoodConstants.Identification.hoodServoId)
 
         /**Apply your configuration here**/
 
@@ -77,10 +75,15 @@ class Hood(hardwareMap: HardwareMap) {
 
     }
 
+    fun setServo(Angle: Double){
+      hoodServo.set(Angle)
+    }
+
     fun moveHoodDownPosition(){
         hoodServo.set(HoodConstants.PhysicalLimits.minAngle)
 
     }
+
 
 
 }

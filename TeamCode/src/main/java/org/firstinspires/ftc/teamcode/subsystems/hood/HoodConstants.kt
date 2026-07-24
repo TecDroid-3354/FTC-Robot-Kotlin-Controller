@@ -7,8 +7,9 @@ class HoodConstants {
 
     object PhysicalLimits {
         val gearRatio = 1/2
-        val minAngle = 5.0 * gearRatio
-        val maxAngle = 30.0 * gearRatio
+        val minAngle = 0.0
+        val maxAngle = 1.0
+
     }
     object Configuration {
         val isHoodServoInverted = false
