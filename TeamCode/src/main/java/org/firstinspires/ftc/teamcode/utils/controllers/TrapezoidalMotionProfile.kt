@@ -15,7 +15,7 @@ import kotlin.math.sqrt
 class TrapezoidalMotionProfile(val motor: OpMotorEx, val config: TrapezoidalModeConfiguration) {
 
     // ------- Profile controller ------
-    private var controller : PIDController                     = PIDController(0.0, 0.0, 0.0)
+    private var controller          : PIDController                     = PIDController(0.0, 0.0, 0.0)
     // ------- Useful variables -------
     private var startPose           : Angle                             = Angle.fromDegrees(0.0)
     private var targetPose          : Angle                             = Angle.fromDegrees(0.0)

@@ -1,13 +1,22 @@
 package org.firstinspires.ftc.teamcode
 
 import com.qualcomm.robotcore.hardware.HardwareMap
+import com.seattlesolvers.solverslib.command.InstantCommand
 import com.seattlesolvers.solverslib.gamepad.GamepadEx
+import com.seattlesolvers.solverslib.hardware.motors.CRServo
+import com.seattlesolvers.solverslib.hardware.motors.CRServoEx
+import com.seattlesolvers.solverslib.hardware.motors.Motor
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.utils.Alliance
 import org.firstinspires.ftc.teamcode.utils.TecDroidRobot
+import org.firstinspires.ftc.teamcode.utils.extensions.a
+import org.firstinspires.ftc.teamcode.utils.extensions.onFalse
+import org.firstinspires.ftc.teamcode.utils.extensions.onTrue
+
 class Robot(private val alliance: Alliance, private val hardwareMap: HardwareMap, private val controller: GamepadEx, telemetry: Telemetry): TecDroidRobot(telemetry, hardwareMap) {
 
     /* Declare your subsystems here */
+    private lateinit var continuousRotationServoExample: CRServoEx
 
     init {
         subsystemInitialization()
@@ -15,12 +24,16 @@ class Robot(private val alliance: Alliance, private val hardwareMap: HardwareMap
 
     /* Initialize your subsystems here */
     override fun subsystemInitialization() {
-
+        continuousRotationServoExample = CRServoEx(hardwareMap, "servo")
+        continuousRotationServoExample.setRunMode(Motor.RunMode.RawPower)
+        continuousRotationServoExample.inverted = false
     }
 
     /* Initialize your teleop controller commands here */
     override fun initTeleOp() {
-
+        controller.a()
+            .onTrue(InstantCommand({ continuousRotationServoExample.set(1.0) }))
+            .onFalse(InstantCommand({ continuousRotationServoExample.set(0.0) }))
     }
 
     /* Initialize your auto commands here, set chassis alliance and starting pose */
