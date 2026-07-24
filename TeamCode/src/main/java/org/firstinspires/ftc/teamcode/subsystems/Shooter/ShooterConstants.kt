@@ -15,13 +15,13 @@ object ShooterConstants {
     object Configuration {
         val isShooterMotorInverted = false
         val shooterMotorZeroBeheavor = Motor.ZeroPowerBehavior.FLOAT
-        val shooterMotorMode = Motor.RunMode.VelocityControl
+        val shooterMotorMode = Motor.RunMode.RawPower
     }
 
     @Configurable
     object Tunables {
         @JvmField
-        var pidCoefficients = PIDCoefficients(-0.01, 0.0, 0.0)
+        var pidCoefficients = PIDCoefficients(0.01, 0.0, 0.0)
         @JvmField
         var feedforward = SimpleMotorFeedforward(0.0,1.15)
     }

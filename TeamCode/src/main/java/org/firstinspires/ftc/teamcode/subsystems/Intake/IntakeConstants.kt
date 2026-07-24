@@ -8,7 +8,7 @@ class IntakeConstants {
     }
 
     object configuration{
-        val isInMotorInverted = true
+        val isInMotorInverted = false
         val inMotorMode = Motor.RunMode.RawPower
         val inMotorZeroBeheaviour = Motor.ZeroPowerBehavior.FLOAT
     }

@@ -9,13 +9,18 @@ class Indexer(val hardwareMap: HardwareMap): SubsystemBase(){
     private lateinit var rightCenteringServo : CRServoEx
     private lateinit var indexerServo : CRServoEx
      init {
-         leftCenteringServo = CRServoEx(hardwareMap, IndexerConstants.Identification.leftCentringServoId)
+         leftCenteringServo = CRServoEx(hardwareMap, IndexerConstants.Identification.leftCenteringServoId)
          rightCenteringServo = CRServoEx(hardwareMap, IndexerConstants.Identification.rightCenteringServoId)
          indexerServo = CRServoEx(hardwareMap, IndexerConstants.Identification.indexerServoId)
 
          leftCenteringServo.setRunMode(IndexerConstants.Configuration.leftCenteringServoRunMode)
          rightCenteringServo.setRunMode(IndexerConstants.Configuration.rightCenteringServoRunMode)
          indexerServo.setRunMode(IndexerConstants.Configuration.indexerServoRunMode)
+
+         indexerServo.setInverted(true)
+         leftCenteringServo.setInverted(false)
+         rightCenteringServo.setInverted(true)
+
      }
 
     fun startCentering () {

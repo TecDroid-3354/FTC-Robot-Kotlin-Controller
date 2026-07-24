@@ -5,7 +5,7 @@ import com.seattlesolvers.solverslib.hardware.motors.CRServoEx
 object IndexerConstants {
 
     object  Identification {
-        val leftCentringServoId = "leftCenteringServo"
+        val leftCenteringServoId = "leftCenteringServo"
 
         val rightCenteringServoId = "rightCenteringServo"
 
@@ -18,5 +18,6 @@ object IndexerConstants {
         val rightCenteringServoRunMode = CRServoEx.RunMode.RawPower
 
         val indexerServoRunMode = CRServoEx.RunMode.RawPower
+
     }
 }

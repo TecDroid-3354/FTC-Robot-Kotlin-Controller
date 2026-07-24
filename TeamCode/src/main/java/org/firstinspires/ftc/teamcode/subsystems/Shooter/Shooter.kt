@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems.Shooter
 
+import android.health.connect.datatypes.units.Power
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.seattlesolvers.solverslib.command.SubsystemBase
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx
@@ -30,10 +31,11 @@ class Shooter(val hardwareMap : HardwareMap) : SubsystemBase() {
     }
 
     fun setShooterVelocity(velocity: AngularVelocity) {
-        val clampedVelocity = velocity.rps.coerceIn(-100.0, 100.0)
-        val velocityInTicksPerSecond = clampedVelocity * 28
+        //val clampedVelocity = velocity.rps.coerceIn(-100.0, 100.0)
+        //val velocityInTicksPerSecond = clampedVelocity * 28
 
-        shooterMotor.velocity = velocityInTicksPerSecond
+        //shooterMotor.velocity = velocityInTicksPerSecond
+        shooterMotor.velocity = velocity.rps * 28
     }
 
     fun stopShooter() {
@@ -43,4 +45,5 @@ class Shooter(val hardwareMap : HardwareMap) : SubsystemBase() {
     fun getVelocity(): AngularVelocity {
         return shooterVelocity
     }
+
 }

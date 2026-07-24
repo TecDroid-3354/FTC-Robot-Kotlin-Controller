@@ -1,17 +1,21 @@
 package org.firstinspires.ftc.teamcode.opmodes
 
+import android.health.connect.datatypes.units.Power
 import com.bylazar.gamepad.Gamepad
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.seattlesolvers.solverslib.command.CommandOpMode
 import com.seattlesolvers.solverslib.command.CommandScheduler
 import com.seattlesolvers.solverslib.command.InstantCommand
+import com.seattlesolvers.solverslib.command.RunCommand
 import com.seattlesolvers.solverslib.command.button.Trigger
 import com.seattlesolvers.solverslib.gamepad.GamepadEx
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys
 import com.seattlesolvers.solverslib.hardware.motors.Motor
 import org.firstinspires.ftc.teamcode.subsystems.Indexer.Indexer
 import org.firstinspires.ftc.teamcode.subsystems.Intake.Intake
+import org.firstinspires.ftc.teamcode.subsystems.Shooter.Shooter
+import org.firstinspires.ftc.teamcode.utils.AngularVelocity
 import org.firstinspires.ftc.teamcode.utils.extensions.a
 import org.firstinspires.ftc.teamcode.utils.extensions.b
 import org.firstinspires.ftc.teamcode.utils.extensions.leftBumper
@@ -22,7 +26,7 @@ import org.firstinspires.ftc.teamcode.utils.extensions.x
 import org.firstinspires.ftc.teamcode.utils.extensions.y
 
 @TeleOp(name = "Test TeleOp", group = "TeleOp")
-class TestTeleOp (val hardwareMap: HardwareMap): CommandOpMode() {
+class TestTeleOp (): CommandOpMode() {
 
     lateinit var controller : GamepadEx
 
@@ -33,6 +37,7 @@ class TestTeleOp (val hardwareMap: HardwareMap): CommandOpMode() {
 
     lateinit var indexer: Indexer
     lateinit var intake: Intake
+    lateinit var shooter: Shooter
 
     override fun initialize() {
         /*frontRightMotor = Motor(hardwareMap, "frontRightMotor")
@@ -44,6 +49,7 @@ class TestTeleOp (val hardwareMap: HardwareMap): CommandOpMode() {
 
         indexer = Indexer(hardwareMap)
         intake = Intake(hardwareMap)
+        shooter = Shooter(hardwareMap)
 
 
         /*controller.y()
@@ -78,6 +84,22 @@ class TestTeleOp (val hardwareMap: HardwareMap): CommandOpMode() {
         controller.rightBumper()
             .onTrue(InstantCommand({intake.reverseIntake()}))
             .onFalse(InstantCommand({intake.disableIntake()}))
+
+        controller.a()
+            .onTrue(InstantCommand({indexer.startCentering()}))
+            .onFalse(InstantCommand({indexer.stopCentering()}))
+        controller.b()
+            .onTrue(InstantCommand({indexer.startIndexer()}))
+            .onFalse(InstantCommand({indexer.stopIndexer()}))
+
+        Trigger({controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1})
+            .whileActiveContinuous(RunCommand({
+                shooter.setShooterVelocity(
+                    AngularVelocity.fromRpm(
+                        6000.0 * controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
+                    )
+                )
+            })).whenInactive(InstantCommand({shooter.stopShooter()}))
     }
 
     override fun runOpMode() {
